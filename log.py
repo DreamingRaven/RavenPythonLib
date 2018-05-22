@@ -1,6 +1,5 @@
-# @Author: George Onoufriou <GeorgeRaven>
-# @Date:   2018-05-16
-# @Project: RavenNucleon
+# @Author: George Onoufriou <georgeraven>
+# @Date:   2018-05-22
 # @Filename: log.py
 # @Last modified by:   georgeraven
 # @Last modified time: 2018-05-22
