@@ -25,13 +25,13 @@ class Log(object):
         if(minLogLevel==-1):
             print(text) # this allows for universal formating as no prePending
         elif(minLogLevel==0) and (self.logLevel >= minLogLevel):
-            print(self.Fore.GREEN + self.prePend_parent + " [ info ] " + text)
+            print(self.Fore.GREEN + self.prePend_parent + " [ info ] " + str(text))
         elif(minLogLevel==1) and (self.logLevel >= minLogLevel):
-            print(self.Fore.YELLOW + self.prePend_parent + " [ warn ] " + text)
+            print(self.Fore.YELLOW + self.prePend_parent + " [ warn ] " + str(text))
         elif(minLogLevel==2) and (self.logLevel >= minLogLevel):
-            print(self.Fore.RED + self.prePend_parent + " [ error ] " + text)
+            print(self.Fore.RED + self.prePend_parent + " [ error ] " + str(text))
         elif(minLogLevel==3) and (self.logLevel >= minLogLevel):
-            print(self.Fore.MAGENTA +self.prePend_parent + " [ debug ] " + text)
+            print(self.Fore.MAGENTA +self.prePend_parent + " [ debug ] " + str(text))
         #TODO implement level specific formating
 
 if __name__ == "__main__":
