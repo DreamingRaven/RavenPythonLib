@@ -9,8 +9,8 @@
 
 class Gupdater(object):
 
-import os, sys
-from posixpath import basename, dirname
+    import os, sys
+    from posixpath import basename, dirname
 
     def __init__(self, urls=[], pathTo="./"):
         self.urls = urls
