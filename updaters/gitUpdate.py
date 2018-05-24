@@ -26,4 +26,4 @@ class Gupdater(object):
                 else:
                     os.system("cd " + basename(url) +  "; git pull; cd ..")
         except:
-            None
+            print("could not update modules" + sys.exc_info()[0])
