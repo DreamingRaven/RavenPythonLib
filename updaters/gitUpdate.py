@@ -1,7 +1,7 @@
 # @Author: George Onoufriou <georgeraven>
 # @Date:   2018-05-24
 # @Filename: gitUpdate.py
-# @Last modified by:   archer
+# @Last modified by:   georgeraven
 # @Last modified time: 2018-05-29
 # @License: Please see LICENSE file in project root
 
@@ -25,18 +25,18 @@ class Gupdater(object):
         path = path if path is not None else self.path
 
         # neat trick to always ensure path ends in seperator '/' by appending empty
-        path = os.path.join(path, "") # e.g "/usr/bin" vs "/usr/bin/"
+        path = self.os.path.join(path, "") # e.g "/usr/bin" vs "/usr/bin/"
 
         for url in urls:
-            if (os.path.exists(path + os.path.basename(url)) == False):
+            if (self.os.path.exists(path + self.os.path.basename(url)) == False):
                 print(prePend, "find=false installing:",
-                path + os.path.basename(url))
+                path + self. os.path.basename(url))
                 try:
-                    os.system("cd " + path + "; git clone " + url)
+                    self.os.system("cd " + path + "; git clone " + url)
                 except:
                     print(prePend,
                     "Could not install:", url , "to",
-                    path + os.path.basename(url) )
+                    path + self.os.path.basename(url) )
 
 
 
