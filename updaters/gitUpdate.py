@@ -39,7 +39,7 @@ class Gupdater(object):
                     path + self.os.path.basename(url) )
 
     def install(path=None, urls=None):
-        installer(path=path, urls=urls)
+        self.installer(path=path, urls=urls)
 
 
 
@@ -66,4 +66,4 @@ class Gupdater(object):
                     None
 
     def update(path=None, urls=None):
-        updater(path=path, urls=urls)
+        self.updater(path=path, urls=urls)
