@@ -18,8 +18,7 @@ class Gupdater(object):
         self.urls = urls
         self.path = path
 
-    def install(path=None, urls=None):
-        installer(path=path, urls=urls)
+
 
     def installer(path=None, urls=None):
         urls = urls if urls is not None else self.urls
@@ -39,9 +38,10 @@ class Gupdater(object):
                     "Could not install:", url , "to",
                     path + self.os.path.basename(url) )
 
+    def install(path=None, urls=None):
+        installer(path=path, urls=urls)
 
-    def update(path=None, urls=None):
-        updater(path=path, urls=urls)
+
 
     def updater(path=None, urls=None):
         urls = urls if urls is not None else self.urls
@@ -64,3 +64,6 @@ class Gupdater(object):
                         "; git pull")
                 except:
                     None
+
+    def update(path=None, urls=None):
+        updater(path=path, urls=urls)
