@@ -53,10 +53,10 @@ class Gupdater(object):
 
         # attempt self update if permission availiable
         try:
-            print(self.prePend, "Updating self:")
+            print(self.prePend + " Updating self:")
             self.os.system("cd " + path + "; git pull")
         except:
-            print(self.prePend + "Could not update self")
+            print(self.prePend + " Could not update self")
 
             for url in urls:
                 # update any dependancies
