@@ -58,6 +58,7 @@ class Gupdater(object):
         except:
             print(self.prePend + " Could not update self")
 
+        print(self.prePend + " " + urls)
         for url in urls:
             # update any dependancies
             print(self.prePend, "Updating", self.os.path.basename(url) + ":" )
