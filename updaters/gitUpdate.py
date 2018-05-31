@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: gitUpdate.py
 # @Last modified by:   georgeraven
-# @Last modified time: 2018-05-29
+# @Last modified time: 2018-05-31
 # @License: Please see LICENSE file in project root
 
 
@@ -18,7 +18,8 @@ class Gupdater(object):
         self.urls = urls
         self.path = path
 
-
+    def install(path=None, urls=None):
+        installer(path=path, urls=urls)
 
     def installer(path=None, urls=None):
         urls = urls if urls is not None else self.urls
@@ -39,6 +40,8 @@ class Gupdater(object):
                     path + self.os.path.basename(url) )
 
 
+    def update(path=None, urls=None):
+        updater(path=path, urls=urls)
 
     def updater(path=None, urls=None):
         urls = urls if urls is not None else self.urls
