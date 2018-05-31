@@ -62,10 +62,10 @@ class Gupdater(object):
             # update any dependancies
             print(self.prePend, "Updating", self.os.path.basename(url) + ":" )
             try:
-                os.system("cd " + path + self.os.path.basename(url) +
+                self.os.system("cd " + path + self.os.path.basename(url) +
                     "; git pull")
             except:
-                print("Gupdater failed, falling back: " + str(sys.exc_info()[1]), 1)
+                print("could not update, falling back: " + str(self.sys.exc_info()[1]), 1)
 
     def update(self, path=None, urls=None):
         self.updater(path=path, urls=urls)
