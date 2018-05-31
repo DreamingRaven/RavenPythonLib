@@ -65,7 +65,7 @@ class Gupdater(object):
                 os.system("cd " + path + self.os.path.basename(url) +
                     "; git pull")
             except:
-                None
+                print("Gupdater failed, falling back: " + str(sys.exc_info()[1]), 1)
 
     def update(self, path=None, urls=None):
         self.updater(path=path, urls=urls)
