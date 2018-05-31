@@ -20,7 +20,7 @@ class Gupdater(object):
 
 
 
-    def installer(path=None, urls=None):
+    def installer(self, path=None, urls=None):
         urls = urls if urls is not None else self.urls
         path = path if path is not None else self.path
 
@@ -38,12 +38,12 @@ class Gupdater(object):
                     "Could not install:", url , "to",
                     path + self.os.path.basename(url) )
 
-    def install(path=None, urls=None):
+    def install(self, path=None, urls=None):
         self.installer(path=path, urls=urls)
 
 
 
-    def updater(path=None, urls=None):
+    def updater(self, path=None, urls=None):
         urls = urls if urls is not None else self.urls
         path = path if path is not None else self.path
         # neat trick to force filenames to always end in seperator "/"
@@ -65,5 +65,5 @@ class Gupdater(object):
                 except:
                     None
 
-    def update(path=None, urls=None):
+    def update(self, path=None, urls=None):
         self.updater(path=path, urls=urls)
