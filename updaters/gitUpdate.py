@@ -18,6 +18,8 @@ class Gupdater(object):
         self.urls = urls
         self.path = path
 
+        self.name = os.path.basename(sys.argv[0])
+        self.prePend =  "[ " + self.name + " ] "
 
 
     def installer(self, path=None, urls=None):
@@ -29,12 +31,12 @@ class Gupdater(object):
 
         for url in urls:
             if (self.os.path.exists(path + self.os.path.basename(url)) == False):
-                print(prePend, "find=false installing:",
+                print(self.prePend, "find=false installing:",
                 path + self. os.path.basename(url))
                 try:
                     self.os.system("cd " + path + "; git clone " + url)
                 except:
-                    print(prePend,
+                    print(self.prePend,
                     "Could not install:", url , "to",
                     path + self.os.path.basename(url) )
 
@@ -51,14 +53,14 @@ class Gupdater(object):
 
         # attempt self update if permission availiable
         try:
-            print(prePend, "Updating self:")
+            print(self.prePend, "Updating self:")
             self.os.system("cd " + path + "; git pull")
         except:
-            print(prePend + "Could not update self")
+            print(self.prePend + "Could not update self")
 
             for url in urls:
                 # update any dependancies
-                print(prePend, "Updating", self.os.path.basename(url) + ":" )
+                print(self.prePend, "Updating", self.os.path.basename(url) + ":" )
                 try:
                     os.system("cd " + path + self.os.path.basename(url) +
                         "; git pull")
