@@ -58,14 +58,14 @@ class Gupdater(object):
         except:
             print(self.prePend + " Could not update self")
 
-            for url in urls:
-                # update any dependancies
-                print(self.prePend, "Updating", self.os.path.basename(url) + ":" )
-                try:
-                    os.system("cd " + path + self.os.path.basename(url) +
-                        "; git pull")
-                except:
-                    None
+        for url in urls:
+            # update any dependancies
+            print(self.prePend, "Updating", self.os.path.basename(url) + ":" )
+            try:
+                os.system("cd " + path + self.os.path.basename(url) +
+                    "; git pull")
+            except:
+                None
 
     def update(self, path=None, urls=None):
         self.updater(path=path, urls=urls)
