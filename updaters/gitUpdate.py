@@ -18,7 +18,7 @@ class Gupdater(object):
         self.urls = urls
         self.path = path
 
-        self.name = os.path.basename(sys.argv[0])
+        self.name = self.os.path.basename(self.sys.argv[0])
         self.prePend =  "[ " + self.name + " ] "
 
 
