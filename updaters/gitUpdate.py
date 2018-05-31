@@ -56,7 +56,7 @@ class Gupdater(object):
             print(self.prePend + " Updating self:")
             self.os.system("cd " + path + "; git pull")
         except:
-            print(self.prePend + " Could not update self" +
+            print(self.prePend + " Could not update self, falling back" +
                 str(self.sys.exc_info()[1]), 1)
 
         for url in urls:
