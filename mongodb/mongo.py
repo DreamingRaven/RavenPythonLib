@@ -58,6 +58,18 @@ class Mongo(object):
               0 # used in logger to set min level
               )
 
+    # creates database
+    def create(self, print=print):
+        None
+
+    # starts an existing database
+    def start(self, print=print):
+        None
+
+    # stops a running database on local system
+    def stop(self, print=print):
+        None
+
     def existanceCheck(self, collName=None):
         # check that db connected
         if (self.db != None):
