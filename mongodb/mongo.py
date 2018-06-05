@@ -55,7 +55,7 @@ class Mongo(object):
               "\n\tColl Name ="     +       str(self.mongoCollName) +
               "\n\tDb Port ="       +       str(self.mongoPort)     +
               "\n\tDb Url ="        +       str(self.mongoUrl),
-              1 # used in logger to set min level
+              0 # used in logger to set min level
               )
 
     def existanceCheck(self, collName=None):
