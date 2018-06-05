@@ -1,3 +1,12 @@
+# @Author: George Onoufriou <archer>
+# @Date:   2018-05-24
+# @Filename: mongo.py
+# @Last modified by:   archer
+# @Last modified time: 2018-06-05
+# @License: Please see LICENSE file in project root
+
+
+
 class Mongo(object):
 
     # imports for whole class (kept between all classes)
@@ -37,16 +46,15 @@ class Mongo(object):
         self.db = self.client[self.mongoDbName]
 
     # check to make sure everything is set properly
-    def debug(self):
-        print(self.prePend,
-              "\n\tDebug = ",       self.isDebug,
-              "\n\tUsername = ",    self.mongoUser,
-              "\n\tPassword = ",    self.mongoPass,
-              "\n\tDb Ip = ",       self.mongoIp,
-              "\n\tDb Name = ",     self.mongoDbName,
-              "\n\tColl Name =",    self.mongoCollName,
-              "\n\tDb Port =",      self.mongoPort,
-              "\n\tDb Url =",       self.mongoUrl
+    def debug(self, print=print):
+        print("\n\tDebug = "        +       str(self.isDebug)       +
+              "\n\tUsername = "     +       str(self.mongoUser)     +
+              "\n\tPassword = "     +       str(self.mongoPass)     +
+              "\n\tDb Ip = "        +       str(self.mongoIp)       +
+              "\n\tDb Name = "      +       str(self.mongoDbName)   +
+              "\n\tColl Name ="     +       str(self.mongoCollName) +
+              "\n\tDb Port ="       +       str(self.mongoPort)     +
+              "\n\tDb Url ="        +       str(self.mongoUrl)
               )
 
     def existanceCheck(self, collName=None):
