@@ -58,10 +58,6 @@ class Mongo(object):
               0 # used in logger to set min level
               )
 
-    # creates database
-    def create(self, print=print):
-        None
-
     # starts an existing database
     def start(self, print=print):
         None
