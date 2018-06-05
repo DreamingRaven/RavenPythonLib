@@ -10,9 +10,7 @@
 class Mongo(object):
 
     # imports for whole class (kept between all classes)
-    import os
-    import sys
-    import json
+    import os, sys, json
 
     from pymongo import MongoClient, errors
 
