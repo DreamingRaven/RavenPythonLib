@@ -61,17 +61,22 @@ class Mongo(object):
     def start(self, print=print):
         print(self.prePend + "Starting mongodb", 3)
         try:
-            raise ValueError('Testing what happens if it breaks')
+            raise NotImplementedError('not currentley implemented')
         except:
-            print(self.prePend + "could not START mongodb", 1)
+            print(self.prePend + "could not START mongodb" +
+                str(self.sys.exc_info()[0]) + " " +
+                str(self.sys.exc_info()[1]), 1)
+
 
     # stops a running database on local system
     def stop(self, print=print):
         print(self.prePend + "Stopping mongodb", 3)
         try:
-            raise ValueError('Testing what happens if it breaks')
+            raise NotImplementedError('not currentley implemented')
         except:
-            print(self.prePend + "could not STOP mongodb", 1)
+            print(self.prePend + "could not STOP mongodb:" +
+                str(self.sys.exc_info()[0]) + " " +
+                str(self.sys.exc_info()[1]) , 1)
 
     def existanceCheck(self, collName=None):
         # check that db connected
