@@ -18,6 +18,8 @@ class Mongo(object):
     className = "Mongo"
     prePend = "[ " + os.path.basename(sys.argv[0]) + " -> " + className + "] "
 
+
+
     # default constructor
     def __init__(self, isDebug=None, mongoUser=None, mongoPass=None, mongoIp=None,
                  mongoDbName=None, mongoCollName=None, mongoPort=None, mongoUrl=None):
@@ -33,6 +35,8 @@ class Mongo(object):
         self.mongoUrl = mongoUrl if mongoUrl is not None else "mongodb://localhost:27017/"
         self.db = None
 
+
+
     def connect(self):
         # set up individual client
         self.client = self.MongoClient(self.mongoUrl,
@@ -42,6 +46,8 @@ class Mongo(object):
                                   authMechanism=str('SCRAM-SHA-1'))
 
         self.db = self.client[self.mongoDbName]
+
+
 
     # check to make sure everything is set properly
     def debug(self, print=print):
@@ -57,15 +63,18 @@ class Mongo(object):
               0 # used in logger to set min level
               )
 
+
+
     # starts a database
     def start(self, print=print):
         print(self.prePend + "Starting mongodb", 3)
         try:
             raise NotImplementedError('not currentley implemented')
         except:
-            print(self.prePend + "could not START mongodb" +
+            print(self.prePend + "could not START mongodb:\n" +
                 str(self.sys.exc_info()[0]) + " " +
                 str(self.sys.exc_info()[1]), 1)
+
 
 
     # stops a running database on local system
@@ -74,9 +83,11 @@ class Mongo(object):
         try:
             raise NotImplementedError('not currentley implemented')
         except:
-            print(self.prePend + "could not STOP mongodb:" +
+            print(self.prePend + "could not STOP mongodb:\n" +
                 str(self.sys.exc_info()[0]) + " " +
                 str(self.sys.exc_info()[1]) , 1)
+
+
 
     def existanceCheck(self, collName=None):
         # check that db connected
@@ -93,6 +104,8 @@ class Mongo(object):
             print(self.prePend,
                   "please connect to database using <your Mongo() object>.connect()")
             return 0
+
+
 
     def getData(self, pipeline=None, query=None, collName=None, findOne=False):
         collName = collName if collName is not None else self.mongoCollName
@@ -116,17 +129,25 @@ class Mongo(object):
                   "please connect to database using <your Mongo() object>.connect()")
             return 0
 
+
+
     def _getDataThroughPipe(self, pipeline, collName):
         collection = self.db[collName]
         return collection.aggregate(pipeline)
+
+
 
     def _getDataThroughFilter(self, query, collName):
         collection = self.db[collName]
         return collection.find(query)
 
+
+
     def _getDataFindOne(self, query, collName):
         collection = self.db[collName]
         return collection.find_one(query)
+
+
 
     def getMostRecent(self, query=None, collName=None):
         collName = collName if collName is not None else self.mongoCollName
@@ -134,11 +155,15 @@ class Mongo(object):
         # return collection.find_one(query).sort([("_id", -1)])
         return collection.find(query).limit(1).sort([("_id", -1)])
 
+
+
     def shoveJson(self, dict, collName=None):
         if(self.db != None):
             collName = collName if collName is not None else self.mongoCollName
             collection = self.db[collName]
             collection.insert_one(dict)
+
+
 
     def setData(self, data, collName=None):
 
