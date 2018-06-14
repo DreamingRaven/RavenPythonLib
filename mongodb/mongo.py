@@ -45,7 +45,7 @@ class Mongo(object):
 
     # check to make sure everything is set properly
     def debug(self, print=print):
-        print("[ " + self.className + " ]" +
+        print(self.prePend +
               "\n\tDebug = "        +       str(self.isDebug)       +
               "\n\tUsername = "     +       str(self.mongoUser)     +
               "\n\tPassword = "     +       str(self.mongoPass)     +
@@ -59,11 +59,19 @@ class Mongo(object):
 
     # starts an existing database
     def start(self, print=print):
-        None
+        print(self.prePend + "Starting mongodb", 3)
+        try:
+            None
+        except:
+            None
 
     # stops a running database on local system
     def stop(self, print=print):
-        None
+        print(self.prePend + "Stopping mongodb", 3)
+        try:
+            None
+        except:
+            None
 
     def existanceCheck(self, collName=None):
         # check that db connected
