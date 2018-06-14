@@ -10,11 +10,11 @@
 class Mongo(object):
 
     # imports for whole class (kept between all classes)
-    import os, sys, json
-
+    import os, sys, json, subprocess
     from pymongo import MongoClient, errors
 
     # default values which will be set once and unchanged for all Mongo objects
+    home = os.path.expanduser("~")
     className = "Mongo"
     prePend = "[ " + os.path.basename(sys.argv[0]) + " -> " + className + "] "
 
@@ -22,7 +22,8 @@ class Mongo(object):
 
     # default constructor
     def __init__(self, isDebug=None, mongoUser=None, mongoPass=None, mongoIp=None,
-                 mongoDbName=None, mongoCollName=None, mongoPort=None, mongoUrl=None):
+                 mongoDbName=None, mongoCollName=None, mongoPort=None,
+                 mongoUrl=None, mongoPath=None):
 
         # set defaults in non obstructive well defined manner
         self.isDebug = isDebug if isDebug is not None else False
@@ -33,6 +34,7 @@ class Mongo(object):
         self.mongoCollName = mongoCollName if mongoCollName is not None else "testColl"
         self.mongoPort = mongoPort if mongoPort is not None else "27017"
         self.mongoUrl = mongoUrl if mongoUrl is not None else "mongodb://localhost:27017/"
+        self.mongoPath = mongoPath if mongoPath is not None else str(self.home + "/db")
         self.db = None
 
 
@@ -59,17 +61,37 @@ class Mongo(object):
               "\n\tDb Name = "      +       str(self.mongoDbName)   +
               "\n\tColl Name ="     +       str(self.mongoCollName) +
               "\n\tDb Port ="       +       str(self.mongoPort)     +
-              "\n\tDb Url ="        +       str(self.mongoUrl),
+              "\n\tDb Url ="        +       str(self.mongoUrl)      +
+              "\n\tDb Path ="       +       str(self.mongoPath),
               0 # used in logger to set min level
               )
 
 
 
     # starts a database
-    def start(self, print=print):
+    def start(self, print=print, auth=False):
         print(self.prePend + "Starting mongodb", 3)
+        mongoArgs = []
+
         try:
-            raise NotImplementedError('not currentley implemented')
+            # create paths if they dont already exist
+            self.subprocess.call(["mkdir", "-p", str(self.mongoPath)])
+
+            # change mongo arguments depending if authenticating or not
+            if(auth==True):
+                None
+            else:
+                mongoArgs = [
+                    "mongod"    ,
+                    "--bind_ip" ,   str(self.mongoIp)   ,
+                    "--port"    ,   str(self.mongoPort) ,
+                    "--dbpath"  ,   str(self.mongoPath) ,
+                    "--quiet"
+                    ]
+
+            # call mongodb with arguments adjusted prior
+            self.mongoProcess = self.subprocess.Popen(mongoArgs)
+            print(str(type(self.mongoProcess))+ str(self.mongoProcess), 3)
         except:
             print(self.prePend + "could not START mongodb:\n" +
                 str(self.sys.exc_info()[0]) + " " +
@@ -84,6 +106,18 @@ class Mongo(object):
             raise NotImplementedError('not currentley implemented')
         except:
             print(self.prePend + "could not STOP mongodb:\n" +
+                str(self.sys.exc_info()[0]) + " " +
+                str(self.sys.exc_info()[1]) , 1)
+
+
+
+    # stops a running database on local system
+    def addUser(self, print=print):
+        print(self.prePend + "Adding mongoDb User", 3)
+        try:
+            raise NotImplementedError('not currentley implemented')
+        except:
+            print(self.prePend + "could not ADD mongodb USER:\n" +
                 str(self.sys.exc_info()[0]) + " " +
                 str(self.sys.exc_info()[1]) , 1)
 
