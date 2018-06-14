@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-06-05
+# @Last modified time: 2018-06-14
 # @License: Please see LICENSE file in project root
 
 
@@ -45,7 +45,8 @@ class Mongo(object):
 
     # check to make sure everything is set properly
     def debug(self, print=print):
-        print("\n\tDebug = "        +       str(self.isDebug)       +
+        print("[ " + self.className + " ]" +
+              "\n\tDebug = "        +       str(self.isDebug)       +
               "\n\tUsername = "     +       str(self.mongoUser)     +
               "\n\tPassword = "     +       str(self.mongoPass)     +
               "\n\tDb Ip = "        +       str(self.mongoIp)       +
