@@ -57,21 +57,21 @@ class Mongo(object):
               0 # used in logger to set min level
               )
 
-    # starts an existing database
+    # starts a database
     def start(self, print=print):
         print(self.prePend + "Starting mongodb", 3)
         try:
-            None
+            raise ValueError('Testing what happens if it breaks')
         except:
-            None
+            print(self.prePend + "could not START mongodb", 1)
 
     # stops a running database on local system
     def stop(self, print=print):
         print(self.prePend + "Stopping mongodb", 3)
         try:
-            None
+            raise ValueError('Testing what happens if it breaks')
         except:
-            None
+            print(self.prePend + "could not STOP mongodb", 1)
 
     def existanceCheck(self, collName=None):
         # check that db connected
