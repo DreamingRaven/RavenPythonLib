@@ -79,7 +79,7 @@ class Mongo(object):
 
             # change mongo arguments depending if authenticating or not
             if(auth==True):
-                None
+                raise NotImplementedError('auth mongodb not yet implemented')
             else:
                 mongoArgs = [
                     "mongod"    ,
