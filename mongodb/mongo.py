@@ -127,7 +127,7 @@ class Mongo(object):
             # this will only work on linux systems too apparentley
             self.subprocess.Popen(["mongod", "--dbpath", str(self.mongoPath),
                 "--shutdown"])
-            # raise NotImplementedError('not currentley implemented')
+                
         except:
             print(self.prePend + "could not STOP mongodb:\n" +
                 str(self.sys.exc_info()[0]) + " " +
