@@ -74,7 +74,7 @@ class Mongo(object):
 
     # starts a database
     def start(self, print=print, auth=False):
-        print(self.prePend + "Starting mongodb", 3)
+        print(self.prePend + "Starting mongodb: auth=" + str(auth), 3)
         mongoArgs = []
 
         try:
@@ -95,6 +95,7 @@ class Mongo(object):
                     "--auth"    ,
                     "--quiet"
                     ]
+                print("Auth db launching", 3)
             else:
                 mongoArgs = [
                     "mongod"    ,
@@ -104,10 +105,11 @@ class Mongo(object):
                     "--logpath" ,   str(self.mongoLogInclusivePath)  ,
                     "--quiet"
                     ]
-
+                print("No auth db launching...", 3)
             # call mongodb with arguments adjusted prior
             self.mongoProcess = self.subprocess.Popen(mongoArgs)
             print(str(type(self.mongoProcess))+ str(self.mongoProcess), 3)
+
         except:
             print(self.prePend + "could not START mongodb:\n" +
                 str(self.sys.exc_info()[0]) + " " +
@@ -128,8 +130,13 @@ class Mongo(object):
 
 
     # stops a running database on local system
-    def addUser(self, print=print):
-        print(self.prePend + "Adding mongoDb User", 3)
+    def addUser(self, print=print, username=None, password=None):
+
+        # just incase user arguments are changed
+        self.mongoUser = username if username is not None else self.mongoUser
+        self.mongoPass = password if password is not None else self.mongoPass
+
+        print(self.prePend + "Adding mongoDb User: " + str(self.mongoUser), 3)
         try:
             raise NotImplementedError('not currentley implemented')
         except:
