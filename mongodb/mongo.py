@@ -86,7 +86,15 @@ class Mongo(object):
 
             # change mongo arguments depending if authenticating or not
             if(auth==True):
-                raise NotImplementedError('auth mongodb not yet implemented')
+                mongoArgs = [
+                    "mongod"    ,
+                    "--bind_ip" ,   str(self.mongoIp)       ,
+                    "--port"    ,   str(self.mongoPort)     ,
+                    "--dbpath"  ,   str(self.mongoPath)     ,
+                    "--logpath" ,   str(self.mongoLogInclusivePath)  ,
+                    "--auth"    ,
+                    "--quiet"
+                    ]
             else:
                 mongoArgs = [
                     "mongod"    ,
