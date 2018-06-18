@@ -21,10 +21,10 @@ class Mongo(object):
 
 
     # default constructor
-    def __init__(self, isDebug=None, mongoUser=None, mongoPass=None, mongoIp=None,
-                 mongoDbName=None, mongoCollName=None, mongoPort=None,
-                 mongoUrl=None, mongoPath=None, mongoLogPath=None,
-                 mongoLogName=None, userRole=None):
+    def __init__(self, isDebug=None, mongoUser=None, mongoPass=None,
+                 mongoIp=None, mongoDbName=None, mongoCollName=None,
+                 mongoPort=None, mongoUrl=None, mongoPath=None,
+                 mongoLogPath=None, mongoLogName=None, userRole=None):
 
         # set defaults in non obstructive well defined manner
         self.isDebug = isDebug if isDebug is not None else False
@@ -123,7 +123,11 @@ class Mongo(object):
     def stop(self, print=print):
         print(self.prePend + "Stopping mongodb", 3)
         try:
-            raise NotImplementedError('not currentley implemented')
+            # this will only work on local system purposefully!
+            # this will only work on linux systems too apparentley
+            self.subprocess.Popen(["mongod", "--dbpath", str(self.mongoPath),
+                "--shutdown"])
+            # raise NotImplementedError('not currentley implemented')
         except:
             print(self.prePend + "could not STOP mongodb:\n" +
                 str(self.sys.exc_info()[0]) + " " +
