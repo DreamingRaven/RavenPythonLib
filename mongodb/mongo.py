@@ -23,7 +23,7 @@ class Mongo(object):
     # default constructor
     def __init__(self, isDebug=None, mongoUser=None, mongoPass=None, mongoIp=None,
                  mongoDbName=None, mongoCollName=None, mongoPort=None,
-                 mongoUrl=None, mongoPath=None, mongoLogPath=None):
+                 mongoUrl=None, mongoPath=None, mongoLogPath=None, mongoLogName=None):
 
         # set defaults in non obstructive well defined manner
         self.isDebug = isDebug if isDebug is not None else False
@@ -36,6 +36,7 @@ class Mongo(object):
         self.mongoUrl = mongoUrl if mongoUrl is not None else "mongodb://localhost:27017/"
         self.mongoPath = mongoPath if mongoPath is not None else str(self.home + "/db")
         self.mongoLogPath = mongoLogPath if mongoLogPath is not None else str(self.mongoPath + "/log")
+        self.mongoLogInclusivePath = str(self.mongoLogPath + "/" + self.mongoLogName) if mongoLogName is not None else str(self.mongoLogPath + "/mongoLog")
         self.db = None
 
 
@@ -64,7 +65,8 @@ class Mongo(object):
               "\n\tDb Port = "      +       str(self.mongoPort)     +
               "\n\tDb Url = "       +       str(self.mongoUrl)      +
               "\n\tDb Path = "      +       str(self.mongoPath)     +
-              "\n\tDb logPath = "   +       str(self.mongoLogPath),
+              "\n\tDb logPath = "   +       str(self.mongoLogPath)  +
+              "\n\tDb logIncPath = "+       str(self.mongoLogInclusivePath),
               0 # used in logger to set min level
               )
 
@@ -77,7 +79,10 @@ class Mongo(object):
 
         try:
             # create paths if they dont already exist
-            self.subprocess.call(["mkdir", "-p", str(self.mongoPath)])
+            self.subprocess.call(["mkdir", "-p",
+                str(self.mongoPath),
+                str(self.mongoLogPath)
+                ])
 
             # change mongo arguments depending if authenticating or not
             if(auth==True):
@@ -85,9 +90,10 @@ class Mongo(object):
             else:
                 mongoArgs = [
                     "mongod"    ,
-                    "--bind_ip" ,   str(self.mongoIp)   ,
-                    "--port"    ,   str(self.mongoPort) ,
-                    "--dbpath"  ,   str(self.mongoPath) ,
+                    "--bind_ip" ,   str(self.mongoIp)       ,
+                    "--port"    ,   str(self.mongoPort)     ,
+                    "--dbpath"  ,   str(self.mongoPath)     ,
+                    "--logpath" ,   str(self.mongoLogInclusivePath)  ,
                     "--quiet"
                     ]
 
