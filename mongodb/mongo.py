@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-06-14
+# @Last modified time: 2018-06-18
 # @License: Please see LICENSE file in project root
 
 
@@ -23,7 +23,7 @@ class Mongo(object):
     # default constructor
     def __init__(self, isDebug=None, mongoUser=None, mongoPass=None, mongoIp=None,
                  mongoDbName=None, mongoCollName=None, mongoPort=None,
-                 mongoUrl=None, mongoPath=None):
+                 mongoUrl=None, mongoPath=None, mongoLogPath=None):
 
         # set defaults in non obstructive well defined manner
         self.isDebug = isDebug if isDebug is not None else False
@@ -35,6 +35,7 @@ class Mongo(object):
         self.mongoPort = mongoPort if mongoPort is not None else "27017"
         self.mongoUrl = mongoUrl if mongoUrl is not None else "mongodb://localhost:27017/"
         self.mongoPath = mongoPath if mongoPath is not None else str(self.home + "/db")
+        self.mongoLogPath = mongoLogPath if mongoLogPath is not None else str(self.mongoPath + "/log")
         self.db = None
 
 
@@ -59,10 +60,11 @@ class Mongo(object):
               "\n\tPassword = "     +       str(self.mongoPass)     +
               "\n\tDb Ip = "        +       str(self.mongoIp)       +
               "\n\tDb Name = "      +       str(self.mongoDbName)   +
-              "\n\tColl Name ="     +       str(self.mongoCollName) +
-              "\n\tDb Port ="       +       str(self.mongoPort)     +
-              "\n\tDb Url ="        +       str(self.mongoUrl)      +
-              "\n\tDb Path ="       +       str(self.mongoPath),
+              "\n\tColl Name = "    +       str(self.mongoCollName) +
+              "\n\tDb Port = "      +       str(self.mongoPort)     +
+              "\n\tDb Url = "       +       str(self.mongoUrl)      +
+              "\n\tDb Path = "      +       str(self.mongoPath)     +
+              "\n\tDb logPath = "   +       str(self.mongoLogPath),
               0 # used in logger to set min level
               )
 
