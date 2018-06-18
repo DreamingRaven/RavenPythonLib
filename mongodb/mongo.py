@@ -23,7 +23,8 @@ class Mongo(object):
     # default constructor
     def __init__(self, isDebug=None, mongoUser=None, mongoPass=None, mongoIp=None,
                  mongoDbName=None, mongoCollName=None, mongoPort=None,
-                 mongoUrl=None, mongoPath=None, mongoLogPath=None, mongoLogName=None):
+                 mongoUrl=None, mongoPath=None, mongoLogPath=None,
+                 mongoLogName=None, userRole=None):
 
         # set defaults in non obstructive well defined manner
         self.isDebug = isDebug if isDebug is not None else False
@@ -37,6 +38,7 @@ class Mongo(object):
         self.mongoPath = mongoPath if mongoPath is not None else str(self.home + "/db")
         self.mongoLogPath = mongoLogPath if mongoLogPath is not None else str(self.mongoPath + "/log")
         self.mongoLogInclusivePath = str(self.mongoLogPath + "/" + self.mongoLogName) if mongoLogName is not None else str(self.mongoLogPath + "/mongoLog")
+        self.userRole = str(userRole) if userRole is not None else "readWrite"
         self.db = None
 
 
@@ -129,16 +131,22 @@ class Mongo(object):
 
 
 
-    # stops a running database on local system
-    def addUser(self, print=print, username=None, password=None):
+    # adds new user to database and warns if user could not be added
+    def addUser(self, print=print, username=None, password=None, role=None):
 
-        # just incase user arguments are changed
+        # just incase user arguments wanted are different from initial args
         self.mongoUser = username if username is not None else self.mongoUser
         self.mongoPass = password if password is not None else self.mongoPass
+        self.userRole  = role     if role is not     None else self.userRole
 
-        print(self.prePend + "Adding mongoDb User: " + str(self.mongoUser), 3)
+        print(self.prePend + "Adding mongoDb User: " + str(self.mongoUser) +
+            ", Role:" + str(self.userRole), 3)
+
         try:
-            raise NotImplementedError('not currentley implemented')
+            client = self.MongoClient(self.mongoUrl)
+            db = client[self.mongoDbName]
+            db.command("createUser", self.mongoUser, pwd=self.mongoPass, roles=[self.userRole])
+
         except:
             print(self.prePend + "could not ADD mongodb USER:\n" +
                 str(self.sys.exc_info()[0]) + " " +
