@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-06-18
+# @Last modified time: 2018-06-19
 # @License: Please see LICENSE file in project root
 
 
@@ -127,7 +127,7 @@ class Mongo(object):
             # this will only work on linux systems too apparentley
             self.subprocess.Popen(["mongod", "--dbpath", str(self.mongoPath),
                 "--shutdown"])
-                
+
         except:
             print(self.prePend + "could not STOP mongodb:\n" +
                 str(self.sys.exc_info()[0]) + " " +
@@ -136,7 +136,7 @@ class Mongo(object):
 
 
     # adds new user to database and warns if user could not be added
-    def addUser(self, print=print, username=None, password=None, role=None):
+    def addUser(self, username=None, password=None, role=None, print=print):
 
         # just incase user arguments wanted are different from initial args
         self.mongoUser = username if username is not None else self.mongoUser
