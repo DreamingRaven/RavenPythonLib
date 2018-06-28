@@ -165,12 +165,17 @@ class Mongo(object):
 
 
     def importCsv(self, path, collName=None, print=print):
-        if(self.db != None):
-            collName = collName if collName is not None else self.mongoCollName
-            jsonPayload = self.json.loads(self.pd.read_csv(path).to_json(orient='table'))
-        else:
-            raise RuntimeError(self.prePend +
-                " please connect to database using <you're Mongo() object>.connect()")
+        try:
+            if(self.db != None):
+                collName = collName if collName is not None else self.mongoCollName
+                jsonPayload = self.json.loads(self.pd.read_csv(path).to_json(orient='table'))
+                collection = self.db[collName]
+                collection.insert_one(jsonPayload)
+            else:
+                raise RuntimeError(self.prePend +
+                    " please connect to database using <you're Mongo() object>.connect()")
+        except:
+            print("could not import csv: " + path,2)
         # collection.insert_one(jsonPayload)
 
 
@@ -191,7 +196,11 @@ class Mongo(object):
                   "please connect to database using <you're Mongo() object>.connect()")
             return 0
 
+
+
 # # # # # # TODO: Everything below this line needs updating
+
+
 
     def getData(self, pipeline=None, query=None, collName=None, findOne=False):
         collName = collName if collName is not None else self.mongoCollName
