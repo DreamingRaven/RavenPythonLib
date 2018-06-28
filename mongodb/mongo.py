@@ -2,16 +2,22 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-06-19
+# @Last modified time: 2018-06-28
 # @License: Please see LICENSE file in project root
 
 
 
 class Mongo(object):
 
+
+
     # imports for whole class (kept between all classes)
-    import os, sys, json, subprocess
+    import os, sys, json, subprocess, json
     from pymongo import MongoClient, errors
+    import pandas as pd
+
+
+
 
     # default values which will be set once and unchanged for all Mongo objects
     home = os.path.expanduser("~")
@@ -158,6 +164,17 @@ class Mongo(object):
 
 
 
+    def importCsv(self, path, collName=None, print=print):
+        if(self.db != None):
+            collName = collName if collName is not None else self.mongoCollName
+            jsonPayload = self.json.loads(self.pd.read_csv(path).to_json(orient='table'))
+        else:
+            raise RuntimeError(self.prePend +
+                " please connect to database using <you're Mongo() object>.connect()")
+        # collection.insert_one(jsonPayload)
+
+
+
     def existanceCheck(self, collName=None):
         # check that db connected
         if (self.db != None):
@@ -171,10 +188,10 @@ class Mongo(object):
 
         else:
             print(self.prePend,
-                  "please connect to database using <your Mongo() object>.connect()")
+                  "please connect to database using <you're Mongo() object>.connect()")
             return 0
 
-
+# # # # # # TODO: Everything below this line needs updating
 
     def getData(self, pipeline=None, query=None, collName=None, findOne=False):
         collName = collName if collName is not None else self.mongoCollName
@@ -249,6 +266,8 @@ class Mongo(object):
         else:
             print(self.prePend,
                   "please connect to database using <your Mongo() object>.connect()")
+
+
 
 if __name__ == "__main__":
 
