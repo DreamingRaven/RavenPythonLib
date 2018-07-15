@@ -160,7 +160,8 @@ class Mongo(object):
         except:
             print(self.prePend + "could not ADD mongodb USER:\n" +
                 str(self.sys.exc_info()[0]) + " " +
-                str(self.sys.exc_info()[1]) , 1)
+                str(self.sys.exc_info()[1]) ,
+                1)
 
 
 
@@ -168,15 +169,27 @@ class Mongo(object):
         try:
             if(self.db != None):
                 collName = collName if collName is not None else self.mongoCollName
-                jsonPayload = self.json.loads(self.pd.read_csv(path).to_json(orient='table'))
-                del jsonPayload["schema"] # removing dict key that was created without desire by funcs
+                df = self.pd.read_csv(path)
+                # to make life easier find all columns that are constant
+                constColumns = (df != df.iloc[0]).any() != True
+                # first element in constant columns as dictionary
+                #TODO: make this get rid of numpy int64 without having to always be strings
+                constData = (df.loc[0, constColumns]).astype('str') # get first row of constant date and make them safe strings
+                constData = constData.to_dict()
+                # constData = self.json.loads(self.json.dumps(constData))
+                dataDict = self.json.loads(df.to_json(orient='table'))
+                del dataDict["schema"] # removing dict key that was created without desire by funcs
+                dataDict.update(constData)
                 collection = self.db[collName]
-                collection.insert_one(jsonPayload)
+                collection.insert_one(dataDict)
             else:
                 raise RuntimeError(self.prePend +
                     " please connect to database using <you're Mongo() object>.connect()")
         except:
-            print("could not import csv: " + path,2)
+            print("could not import csv: " + path + "\n" +
+                str(self.sys.exc_info()[0]) + " " +
+                str(self.sys.exc_info()[1]) ,
+            2)
         # collection.insert_one(jsonPayload)
 
 
