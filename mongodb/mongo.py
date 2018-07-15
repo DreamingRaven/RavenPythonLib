@@ -1,8 +1,8 @@
 # @Author: George Onoufriou <archer>
 # @Date:   2018-05-24
 # @Filename: mongo.py
-# @Last modified by:   archer
-# @Last modified time: 2018-06-28
+# @Last modified by:   georgeraven
+# @Last modified time: 2018-07-15
 # @License: Please see LICENSE file in project root
 
 
@@ -169,6 +169,7 @@ class Mongo(object):
             if(self.db != None):
                 collName = collName if collName is not None else self.mongoCollName
                 jsonPayload = self.json.loads(self.pd.read_csv(path).to_json(orient='table'))
+                del jsonPayload["schema"] # removing dict key that was created without desire by funcs
                 collection = self.db[collName]
                 collection.insert_one(jsonPayload)
             else:
