@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-06-28
+# @Last modified time: 2018-07-02
 # @License: Please see LICENSE file in project root
 
 
@@ -66,7 +66,7 @@ class Mongo(object):
         print(self.prePend +
               "\n\tDebug = "        +       str(self.isDebug)       +
               "\n\tUsername = "     +       str(self.mongoUser)     +
-              "\n\tPassword = "     +       str(self.mongoPass)     +
+              "\n\tPassword = "     +       str("***")              +
               "\n\tDb Ip = "        +       str(self.mongoIp)       +
               "\n\tDb Name = "      +       str(self.mongoDbName)   +
               "\n\tColl Name = "    +       str(self.mongoCollName) +
@@ -170,6 +170,7 @@ class Mongo(object):
                 collName = collName if collName is not None else self.mongoCollName
                 jsonPayload = self.json.loads(self.pd.read_csv(path).to_json(orient='table'))
                 collection = self.db[collName]
+                if 'schema' in jsonPayload: del jsonPayload['schema']
                 collection.insert_one(jsonPayload)
             else:
                 raise RuntimeError(self.prePend +
