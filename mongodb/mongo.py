@@ -1,13 +1,8 @@
 # @Author: George Onoufriou <archer>
 # @Date:   2018-05-24
 # @Filename: mongo.py
-<<<<<<< HEAD
 # @Last modified by:   archer
 # @Last modified time: 2018-07-16
-=======
-# @Last modified by:   archer
-# @Last modified time: 2018-07-16
->>>>>>> c4ebba3aea1e6e5686f0b8011ee7d47188946dde
 # @License: Please see LICENSE file in project root
 
 
