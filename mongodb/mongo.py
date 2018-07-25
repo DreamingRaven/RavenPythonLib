@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-07-16
+# @Last modified time: 2018-07-25
 # @License: Please see LICENSE file in project root
 
 
@@ -170,12 +170,14 @@ class Mongo(object):
             if(self.db != None):
                 collName = collName if collName is not None else self.mongoCollName
                 df = self.pd.read_csv(path)
-                # to make life easier find all columns that are constant
+                # to make life easier find all columns that are constant by name
                 constColumns = (df != df.iloc[0]).any() != True
                 # first element in constant columns as dictionary
                 #TODO: make this get rid of numpy int64 without having to always be strings
                 constData = (df.loc[0, constColumns]).astype('str') # get first row of constant date and make them safe strings
                 constData = constData.to_dict()
+                # remove the constant data in dataframe now that it has been saved
+                df = df.loc[:, constColumns != True]
                 # constData = self.json.loads(self.json.dumps(constData))
                 dataDict = self.json.loads(df.to_json(orient='table'))
                 del dataDict["schema"] # removing dict key that was created without desire by funcs
@@ -242,7 +244,7 @@ class Mongo(object):
 
     def _getDataThroughPipe(self, pipeline, collName):
         collection = self.db[collName]
-        return collection.aggregate(pipeline)
+        return collection.aggregate(pipeline, allowDiskUse=True)
 
 
 
