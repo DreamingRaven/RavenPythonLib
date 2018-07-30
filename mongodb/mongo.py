@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-07-25
+# @Last modified time: 2018-07-30
 # @License: Please see LICENSE file in project root
 
 
@@ -26,11 +26,12 @@ class Mongo(object):
 
 
 
-    # default constructor
+    # default constructor TODO: make this an input dict for simplicity
     def __init__(self, isDebug=None, mongoUser=None, mongoPass=None,
                  mongoIp=None, mongoDbName=None, mongoCollName=None,
                  mongoPort=None, mongoUrl=None, mongoPath=None,
-                 mongoLogPath=None, mongoLogName=None, userRole=None):
+                 mongoLogPath=None, mongoLogName=None, userRole=None,
+                 mongoCursorTimeout=None):
 
         # set defaults in non obstructive well defined manner
         self.isDebug = isDebug if isDebug is not None else False
@@ -45,6 +46,7 @@ class Mongo(object):
         self.mongoLogPath = mongoLogPath if mongoLogPath is not None else str(self.mongoPath + "/log")
         self.mongoLogInclusivePath = str(self.mongoLogPath + "/" + self.mongoLogName) if mongoLogName is not None else str(self.mongoLogPath + "/mongoLog")
         self.userRole = str(userRole) if userRole is not None else "readWrite"
+        self.mongoCursorTimeout = mongoCursorTimeout if mongoCursorTimeout is not None else 600000 # 10 minutes
         self.db = None
 
 
@@ -74,6 +76,7 @@ class Mongo(object):
               "\n\tDb Url = "       +       str(self.mongoUrl)      +
               "\n\tDb Path = "      +       str(self.mongoPath)     +
               "\n\tDb logPath = "   +       str(self.mongoLogPath)  +
+              "\n\tDb cursorTimeout = "   + str(self.mongoCursorTimeout)  +
               "\n\tDb logIncPath = "+       str(self.mongoLogInclusivePath),
               0 # used in logger to set min level
               )
@@ -96,10 +99,11 @@ class Mongo(object):
             if(auth==True):
                 mongoArgs = [
                     "mongod"    ,
-                    "--bind_ip" ,   str(self.mongoIp)       ,
-                    "--port"    ,   str(self.mongoPort)     ,
-                    "--dbpath"  ,   str(self.mongoPath)     ,
-                    "--logpath" ,   str(self.mongoLogInclusivePath)  ,
+                    "--bind_ip" ,       str(self.mongoIp)       ,
+                    "--port"    ,       str(self.mongoPort)     ,
+                    "--dbpath"  ,       str(self.mongoPath)     ,
+                    "--logpath" ,       str(self.mongoLogInclusivePath)  ,
+                    "--setParameter",   str("cursorTimeoutMillis=" + str(self.mongoCursorTimeout)),
                     "--auth"    ,
                     "--quiet"
                     ]
