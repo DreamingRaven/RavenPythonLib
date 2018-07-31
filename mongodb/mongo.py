@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-07-30
+# @Last modified time: 2018-07-31
 # @License: Please see LICENSE file in project root
 
 
@@ -48,6 +48,18 @@ class Mongo(object):
         self.userRole = str(userRole) if userRole is not None else "readWrite"
         self.mongoCursorTimeout = mongoCursorTimeout if mongoCursorTimeout is not None else 600000 # 10 minutes
         self.db = None
+
+
+
+    def login(self):
+        loginArgs = [
+            "mongo",
+            "--port", str(self.mongoPort),
+            "-u",   str(self.mongoUser),
+            "-p", str(self.mongoPass),
+            "--authenticationDatabase", str(self.mongoDbName)
+        ]
+        self.subprocess.call(loginArgs)
 
 
 
@@ -159,7 +171,11 @@ class Mongo(object):
         try:
             client = self.MongoClient(self.mongoUrl)
             db = client[self.mongoDbName]
-            db.command("createUser", self.mongoUser, pwd=self.mongoPass, roles=[self.userRole])
+
+            if(self.userRole == "all"):
+                db.command("createUser", self.mongoUser, pwd=self.mongoPass, roles=["readWrite", "dbAdmin"])
+            else:
+                db.command("createUser", self.mongoUser, pwd=self.mongoPass, roles=[self.userRole])
 
         except:
             print(self.prePend + "could not ADD mongodb USER:\n" +
