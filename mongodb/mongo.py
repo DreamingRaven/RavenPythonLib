@@ -115,6 +115,7 @@ class Mongo(object):
                     "--port"    ,       str(self.mongoPort)     ,
                     "--dbpath"  ,       str(self.mongoPath)     ,
                     "--logpath" ,       str(self.mongoLogInclusivePath)  ,
+                    "--sslDisabledProtocols" ,       str(none)  ,
                     "--setParameter",   str("cursorTimeoutMillis=" + str(self.mongoCursorTimeout)),
                     "--auth"    ,
                     "--quiet"
