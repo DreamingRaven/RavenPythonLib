@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-07-31
+# @Last modified time: 2018-08-02
 # @License: Please see LICENSE file in project root
 
 
@@ -193,8 +193,16 @@ class Mongo(object):
                 # to make life easier find all columns that are constant by name
                 constColumns = (df != df.iloc[0]).any() != True
                 # first element in constant columns as dictionary
-                #TODO: make this get rid of numpy int64 without having to always be strings
-                constData = (df.loc[0, constColumns]).astype('str') # get first row of constant date and make them safe strings
+                constData = df.loc[0, constColumns]
+                # slightly counter intuitive loop that changes all constant columns from
+                # their original pandas types E.g np.int64 to int
+                counter = 0
+                for i in constData:
+                    try:
+                        constData.iloc[counter] = i.item()
+                    except:
+                        None
+                    counter = counter + 1
                 constData = constData.to_dict()
                 # remove the constant data in dataframe now that it has been saved
                 df = df.loc[:, constColumns != True]
@@ -207,12 +215,12 @@ class Mongo(object):
             else:
                 raise RuntimeError(self.prePend +
                     " please connect to database using <you're Mongo() object>.connect()")
+
         except:
             print("could not import csv: " + path + "\n" +
                 str(self.sys.exc_info()[0]) + " " +
                 str(self.sys.exc_info()[1]) ,
             2)
-        # collection.insert_one(jsonPayload)
 
 
 
