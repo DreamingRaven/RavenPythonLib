@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-08-02
+# @Last modified time: 2018-08-21
 # @License: Please see LICENSE file in project root
 
 
@@ -291,7 +291,6 @@ class Mongo(object):
     def getMostRecent(self, query=None, collName=None):
         collName = collName if collName is not None else self.mongoCollName
         collection = self.db[collName]
-        # return collection.find_one(query).sort([("_id", -1)])
         return collection.find(query).limit(1).sort([("_id", -1)])
 
 
