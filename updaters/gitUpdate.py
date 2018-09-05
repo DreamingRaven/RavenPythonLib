@@ -1,13 +1,15 @@
 # @Author: George Onoufriou <georgeraven>
 # @Date:   2018-05-24
 # @Filename: gitUpdate.py
-# @Last modified by:   georgeraven
-# @Last modified time: 2018-05-31
+# @Last modified by:   archer
+# @Last modified time: 2018-09-05
 # @License: Please see LICENSE file in project root
 
 
 
 class Gupdater(object):
+
+
 
     import os, sys
     from posixpath import basename, dirname
@@ -20,6 +22,7 @@ class Gupdater(object):
 
         self.name = self.os.path.basename(self.sys.argv[0])
         self.prePend =  "[ " + self.name + " ] "
+
 
 
     def installer(self, path=None, urls=None):
@@ -39,6 +42,8 @@ class Gupdater(object):
                     print(self.prePend,
                     "Could not install:", url , "to",
                     path + self.os.path.basename(url) )
+
+
 
     def install(self, path=None, urls=None):
         self.installer(path=path, urls=urls)
