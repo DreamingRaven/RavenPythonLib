@@ -6,6 +6,36 @@
 # @License: Please see LICENSE file in project root
 
 
+class Gridfs(object):
+    """
+    Gridfs: A MongoDB wrapper for handling GridFS virtual filesystem, and all
+        associated functionality, such as instantiating users,  authentication,
+        connection, disconnection, storage, and retrieval.
+    """
+    # imports for whole class (kept between all classes)
+    import os, sys, json, subprocess, json
+    from pymongo import MongoClient, errors
+    import pandas as pd
+
+    # default values which will be set once and unchanged for all Mongo objects
+    home = os.path.expanduser("~")
+    className = "Mongo"
+    prePend = "[ " + os.path.basename(sys.argv[0]) + " -> " + className + "] "
+
+    def __init__(self, argfs):
+        """
+        Initialisation function for gridfs
+
+        self: just a gridfs object as standard,
+
+        argfs: a dictionary containing all the relevant overloading arguments
+            argfs, is a dictionary in this manner to cut down on the need for
+            repettition so that args alone can be passed to everything rather
+            thank having to explicitly state a plethora of inputs. See below
+            code for the full list of expected inputs:
+        """
+
+
 
 class Mongo(object):
 
