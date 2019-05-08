@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-08-21
+# @Last modified time: 2019-05-08T15:31:39+01:00
 # @License: Please see LICENSE file in project root
 
 
@@ -35,10 +35,10 @@ class Mongo(object):
 
         # set defaults in non obstructive well defined manner
         self.isDebug = isDebug if isDebug is not None else False
-        self.mongoUser = mongoUser if mongoUser is not None else "Groot"
-        self.mongoPass = mongoPass if mongoPass is not None else "IamGroot"
+        self.mongoUser = mongoUser if mongoUser is not None else "groot"
+        self.mongoPass = mongoPass if mongoPass is not None else "iamgroot"
         self.mongoIp = mongoIp if mongoIp is not None else "127.0.0.1"
-        self.mongoDbName = mongoDbName if mongoDbName is not None else "test"
+        self.mongoDbName = mongoDbName if mongoDbName is not None else "RecSyst"
         self.mongoCollName = mongoCollName if mongoCollName is not None else "testColl"
         self.mongoPort = mongoPort if mongoPort is not None else "27017"
         self.mongoUrl = mongoUrl if mongoUrl is not None else "mongodb://localhost:27017/"
@@ -50,6 +50,8 @@ class Mongo(object):
         self.db = None
 
 
+    def __iter__(self):
+        return iter(self.db)
 
     def login(self):
         loginArgs = [
