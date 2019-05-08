@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2019-05-08T15:31:39+01:00
+# @Last modified time: 2019-05-08T15:43:20+01:00
 # @License: Please see LICENSE file in project root
 
 
@@ -49,6 +49,8 @@ class Mongo(object):
         self.mongoCursorTimeout = mongoCursorTimeout if mongoCursorTimeout is not None else 600000 # 10 minutes
         self.db = None
 
+    def mongodb(self):
+        return self.db
 
     def __iter__(self):
         return iter(self.db)
