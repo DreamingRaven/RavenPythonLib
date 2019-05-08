@@ -2,7 +2,7 @@
 # @Date:   2018-05-24
 # @Filename: mongo.py
 # @Last modified by:   archer
-# @Last modified time: 2018-08-21
+# @Last modified time: 2019-05-08T15:31:39+01:00
 # @License: Please see LICENSE file in project root
 
 
@@ -50,6 +50,8 @@ class Mongo(object):
         self.db = None
 
 
+    def __iter__(self):
+        return iter(self.db)
 
     def login(self):
         loginArgs = [
