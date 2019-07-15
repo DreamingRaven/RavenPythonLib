@@ -20,3 +20,12 @@ class Mongo(object):
         pass
 
     __init__.__annotations__ = {"dictionary": dict, "return": None}
+
+
+def test():
+    """Unit test of MongoDB compat."""
+    db = Mongo()
+
+
+if(__name__ == "__main__"):
+    test()
