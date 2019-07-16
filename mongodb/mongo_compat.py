@@ -3,11 +3,12 @@
 # @Email:  george raven community at pm dot me
 # @Filename: mongo_compat.py
 # @Last modified by:   archer
-# @Last modified time: 2019-07-15
+# @Last modified time: 2019-07-16
 # @License: Please see LICENSE in project root
 
 from __future__ import print_function, absolute_import   # python 2-3 compat
 import os
+import subprocess
 from pymongo import MongoClient, errors  # python 2 or python 3 versions
 
 
@@ -60,7 +61,31 @@ class Mongo(object):
             authMechanism=str(self.args["mongoAuth"]))
         self.args["db"] = self.args["client"][self.args["mongoDbName"]]
 
+    def login(self):
+        """Log in to database, interupt, and availiable via cli."""
+        loginArgs = [
+            "mongo",
+            "--port", str(self.args["mongoPort"]),
+            "-u",   str(self.args["mongoUser"]),
+            "-p", str(self.args["mongoPass"]),
+            "--authenticationDatabase", str(self.args["mongoDbName"])
+        ]
+        subprocess.call(loginArgs)
+
+    def start(self):
+        """Launch the database."""
+        pass
+
+    def stop(self):
+        """Stop a running local database."""
+        pass
+
+    def addUser(self):
+        """Add a user with given permissions to the authentication database."""
+        pass
+
     def debug(self):
+        """Log function to help track the internal state of the class."""
         self.args["pylog"](self.args)
 
     def _merge_dicts(self, *dicts):
@@ -120,6 +145,10 @@ def test():
     db.debug()
     db.connect()
     db.debug()
+    db.start()
+    db.addUser()
+    db.login()
+    db.stop()
     # len(db)
     # for item in db:
     #     # print(item, "\t\t", db[item])
