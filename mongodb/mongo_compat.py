@@ -75,14 +75,20 @@ class Mongo(object):
     def start(self):
         """Launch the database."""
         pass
+        raise NotImplementedError("start() is not yet implemented")
 
     def stop(self):
         """Stop a running local database."""
         pass
+        raise NotImplementedError("strop() is not yet implemented")
 
     def addUser(self):
         """Add a user with given permissions to the authentication database."""
-        pass
+        self.args["pylog"]("Adding  mongodb user:",
+                           str(self.args["mongoUser"]),
+                           ", role:", str(self.args["userRole"]),
+                           ", authdb:", str(self.args["mongoDbName"]))
+        raise NotImplementedError("addUser()) is not yet implemented")
 
     def debug(self):
         """Log function to help track the internal state of the class."""
