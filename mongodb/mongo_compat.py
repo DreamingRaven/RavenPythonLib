@@ -42,6 +42,7 @@ class Mongo(object):
             "mongoLogName": "mongoLog",
             "mongoCursorTimeout": 600000,
             "pylog": logger if logger is not None else print,
+            "mongoSsl": None,
             "db": None,
         }
         self.args = self._merge_dicts(defaults, args)
