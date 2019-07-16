@@ -88,7 +88,7 @@ class Mongo(object):
                            str(self.args["mongoUser"]),
                            ", role:", str(self.args["userRole"]),
                            ", authdb:", str(self.args["mongoDbName"]))
-        raise NotImplementedError("addUser()) is not yet implemented")
+        raise NotImplementedError("addUser() is not yet implemented")
 
     def debug(self):
         """Log function to help track the internal state of the class."""
