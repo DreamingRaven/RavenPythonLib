@@ -73,6 +73,7 @@ class Mongo(object):
                                     self.args["mongoLogName"]),
             "--quiet"
         ]
+        self.args["pylog"]("Launching unauth db on localhost")
         # launch unauth db
         subprocess.Popen(cliArgs)
         # wait for db to come up
