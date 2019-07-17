@@ -79,15 +79,32 @@ class Mongo(object):
 
     def start(self):
         """Launch the database."""
-        pass
-        raise NotImplementedError("start() is not yet implemented")
+        self.args["pylog"]("Starting mongodb: auth=",
+                           str(self.args["mongoAuth"]))
+        cliArgs = [
+            "mongod",
+            "--bind_ip",        str(self.args["mongoIp"]),
+            "--port",           str(self.args["mongoPort"]),
+            "--dbpath",         str(self.args["mongoPath"]),
+            "--logpath",        str(self.args["mongoLogPath"] +
+                                    self.args["mongoLogName"]),
+            "--setParameter",   str("cursorTimeoutMillis=" +
+                                    str(self.args["mongoCursorTimeout"])),
+            "--auth",
+            "--quiet"
+        ]
+        self.args["mongoProcess"] = subprocess.Popen(cliArgs)
 
     start.__annotations__ = {"return": None}
 
     def stop(self):
         """Stop a running local database."""
-        pass
-        raise NotImplementedError("strop() is not yet implemented")
+        self.args["pylog"]("Shutting down MongoDB.")
+        subprocess.Popen(
+            ["mongod",
+             "--dbpath", str(self.args["mongoPath"]),
+             "--shutdown"]
+        )
 
     stop.__annotations__ = {"return": None}
 
@@ -165,7 +182,7 @@ def test():
     db.connect()
     db.debug()
     db.start()
-    db.addUser()
+    # db.addUser()
     db.login()
     db.stop()
     # len(db)
