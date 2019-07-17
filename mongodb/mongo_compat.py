@@ -9,6 +9,7 @@
 from __future__ import print_function, absolute_import   # python 2-3 compat
 import os
 import subprocess
+import time
 from pymongo import MongoClient, errors  # python 2 or python 3 versions
 
 
@@ -48,6 +49,52 @@ class Mongo(object):
         self.args = self._merge_dicts(defaults, args)
 
     __init__.__annotations__ = {"args": dict, "return": None}
+
+    def initDb(self):
+        """Initialise the database.
+
+        Includes ensuring db path and db log path exist and generating,
+        creating the DB files, and adding an authentication user.
+        All of this should be done on a localhost port so that the
+        unprotected database is never exposed.
+        """
+        # create directories
+        subprocess.call([
+            "mkdir", "-p",
+            str(self.args["mongoPath"]),
+            str(self.args["mongoLogPath"]),
+        ])
+        cliArgs = [  # non authentication version of db start
+            "mongod",
+            "--bind_ip",        "127.0.0.1",
+            "--port",           "27017",
+            "--dbpath",         str(self.args["mongoPath"]),
+            "--logpath",        str(self.args["mongoLogPath"] +
+                                    self.args["mongoLogName"]),
+            "--quiet"
+        ]
+        # launch unauth db
+        subprocess.Popen(cliArgs)
+        # wait for db to come up
+        time.sleep(2)
+        # connect to db in local scope
+        client = MongoClient("mongodb://localhost:27017/")
+        db = client[self.args["mongoDbName"]]
+
+        if(self.args["userRole"] == "all"):
+            db.command("createUser",
+                       self.args["mongoUser"],
+                       pwd=self.args["mongoPass"],
+                       roles=["readWrite", "dbAdmin"])
+        else:
+            db.command("createUser",
+                       self.args["mongoUser"],
+                       pwd=self.args["mongoPass"],
+                       roles=[self.args["userRole"]])
+        # close the unauth db
+        self.stop()
+
+    initDb.__annotations__ = {"return": None}
 
     def connect(self):
         """Connect to a specific mongodb database defined in args.
@@ -110,11 +157,11 @@ class Mongo(object):
 
     def addUser(self):
         """Add a user with given permissions to the authentication database."""
+        raise NotImplementedError("addUser() is not yet implemented")
         self.args["pylog"]("Adding  mongodb user:",
                            str(self.args["mongoUser"]),
                            ", role:", str(self.args["userRole"]),
                            ", authdb:", str(self.args["mongoDbName"]))
-        raise NotImplementedError("addUser() is not yet implemented")
 
     addUser.__annotations__ = {"return": None}
 
