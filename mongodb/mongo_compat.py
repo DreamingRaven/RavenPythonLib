@@ -80,17 +80,21 @@ class Mongo(object):
         # connect to db in local scope
         client = MongoClient("mongodb://localhost:27017/")
         db = client[self.args["mongoDbName"]]
-
-        if(self.args["userRole"] == "all"):
-            db.command("createUser",
-                       self.args["mongoUser"],
-                       pwd=self.args["mongoPass"],
-                       roles=["readWrite", "dbAdmin"])
-        else:
-            db.command("createUser",
-                       self.args["mongoUser"],
-                       pwd=self.args["mongoPass"],
-                       roles=[self.args["userRole"]])
+        try:
+            if(self.args["userRole"] == "all"):
+                db.command("createUser",
+                           self.args["mongoUser"],
+                           pwd=self.args["mongoPass"],
+                           roles=["readWrite", "dbAdmin"])
+            else:
+                db.command("createUser",
+                           self.args["mongoUser"],
+                           pwd=self.args["mongoPass"],
+                           roles=[self.args["userRole"]])
+        except errors.DuplicateKeyError:
+            self.args["pylog"](self.args["mongoUser"] + "@" +
+                               self.args["mongoDbName"],
+                               "already exists skipping.")
         # close the unauth db
         self.stop()
 
@@ -226,9 +230,12 @@ def test():
     """Unit test of MongoDB compat."""
     db = Mongo({"test2": 2})
     db.debug()
+    db.initDb()
+    time.sleep(2)
+    db.start()
+    time.sleep(2)
     db.connect()
     db.debug()
-    db.start()
     # db.addUser()
     db.login()
     db.stop()
