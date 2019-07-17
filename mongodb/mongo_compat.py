@@ -3,7 +3,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: mongo_compat.py
 # @Last modified by:   archer
-# @Last modified time: 2019-07-16
+# @Last modified time: 2019-07-17
 # @License: Please see LICENSE in project root
 
 from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -62,6 +62,8 @@ class Mongo(object):
             authMechanism=str(self.args["mongoAuth"]))
         self.args["db"] = self.args["client"][self.args["mongoDbName"]]
 
+    connect.__annotations__ = {"return": None}
+
     def login(self):
         """Log in to database, interupt, and availiable via cli."""
         loginArgs = [
@@ -73,15 +75,21 @@ class Mongo(object):
         ]
         subprocess.call(loginArgs)
 
+    login.__annotations__ = {"return": None}
+
     def start(self):
         """Launch the database."""
         pass
         raise NotImplementedError("start() is not yet implemented")
 
+    start.__annotations__ = {"return": None}
+
     def stop(self):
         """Stop a running local database."""
         pass
         raise NotImplementedError("strop() is not yet implemented")
+
+    stop.__annotations__ = {"return": None}
 
     def addUser(self):
         """Add a user with given permissions to the authentication database."""
@@ -91,9 +99,13 @@ class Mongo(object):
                            ", authdb:", str(self.args["mongoDbName"]))
         raise NotImplementedError("addUser() is not yet implemented")
 
+    addUser.__annotations__ = {"return": None}
+
     def debug(self):
         """Log function to help track the internal state of the class."""
         self.args["pylog"](self.args)
+
+    debug.__annotations__ = {"return": None}
 
     def _merge_dicts(self, *dicts):
         """Given multiple dictionaries, merge together in order."""
