@@ -10,6 +10,7 @@ from __future__ import print_function, absolute_import   # python 2-3 compat
 import os
 import subprocess
 import time
+from bson import json_util
 from pymongo import MongoClient, errors  # python 2 or python 3 versions
 
 
@@ -78,23 +79,7 @@ class Mongo(object):
         # wait for db to come up
         time.sleep(2)
         # connect to db in local scope
-        client = MongoClient("mongodb://localhost:27017/")
-        db = client[self.args["mongoDbName"]]
-        try:
-            if(self.args["userRole"] == "all"):
-                db.command("createUser",
-                           self.args["mongoUser"],
-                           pwd=self.args["mongoPass"],
-                           roles=["readWrite", "dbAdmin"])
-            else:
-                db.command("createUser",
-                           self.args["mongoUser"],
-                           pwd=self.args["mongoPass"],
-                           roles=[self.args["userRole"]])
-        except errors.DuplicateKeyError:
-            self.args["pylog"](self.args["mongoUser"] + "@" +
-                               self.args["mongoDbName"],
-                               "already exists skipping.")
+        self._addUser()
         # close the unauth db
         self.stop()
 
@@ -159,21 +144,50 @@ class Mongo(object):
 
     stop.__annotations__ = {"return": None}
 
-    def addUser(self):
+    def _addUser(self):
         """Add a user with given permissions to the authentication database."""
-        raise NotImplementedError("addUser() is not yet implemented")
         self.args["pylog"]("Adding  mongodb user:",
                            str(self.args["mongoUser"]),
                            ", role:", str(self.args["userRole"]),
                            ", authdb:", str(self.args["mongoDbName"]))
-
-    addUser.__annotations__ = {"return": None}
+        client = MongoClient("mongodb://localhost:27017/")
+        db = client[self.args["mongoDbName"]]
+        try:
+            if(self.args["userRole"] == "all"):
+                db.command("createUser",
+                           self.args["mongoUser"],
+                           pwd=self.args["mongoPass"],
+                           roles=["readWrite", "dbAdmin"])
+            else:
+                db.command("createUser",
+                           self.args["mongoUser"],
+                           pwd=self.args["mongoPass"],
+                           roles=[self.args["userRole"]])
+        except errors.DuplicateKeyError:
+            self.args["pylog"](self.args["mongoUser"] + "@" +
+                               self.args["mongoDbName"],
+                               "already exists skipping.")
+    _addUser.__annotations__ = {"return": None}
 
     def debug(self):
         """Log function to help track the internal state of the class."""
         self.args["pylog"](self.args)
 
     debug.__annotations__ = {"return": None}
+
+    def imports(self, collection, json=None, dictionary=None):
+        """Import data of specified format into MongoDB.
+
+        Takes a collection name and one of either json or dictionary and
+        imports it to the specified collection.
+        """
+        if(json is not None):
+            raise NotImplementedError("direct json import is not yet ready")
+            data = json_util.loads(json)
+        elif (dictionary is not None):
+            self.args["db"][str(collection)].insert(dictionary)
+
+    imports.__annotations__ = {"return": None}
 
     def _merge_dicts(self, *dicts):
         """Given multiple dictionaries, merge together in order."""
@@ -230,21 +244,17 @@ def test():
     """Unit test of MongoDB compat."""
     db = Mongo({"test2": 2})
     db.debug()
+    db.stop()
+    time.sleep(2)
     db.initDb()
     time.sleep(2)
     db.start()
     time.sleep(2)
     db.connect()
     db.debug()
-    # db.addUser()
+    db.imports(collection="debug", dictionary={"test": 15, "test1": "strings"})
     db.login()
     db.stop()
-    # len(db)
-    # for item in db:
-    #     # print(item, "\t\t", db[item])
-    #     db[item]
-    # del db["test2"]
-    # len(db)
 
 
 if(__name__ == "__main__"):
