@@ -10,7 +10,6 @@ from __future__ import print_function, absolute_import   # python 2-3 compat
 import os
 import subprocess
 import time
-from bson import json_util
 from pymongo import MongoClient, errors  # python 2 or python 3 versions
 
 
@@ -183,7 +182,7 @@ class Mongo(object):
         """
         if(json is not None):
             raise NotImplementedError("direct json import is not yet ready")
-            data = json_util.loads(json)
+            # data = json_util.loads(json)
         elif (dictionary is not None):
             self.args["db"][str(collection)].insert(dictionary)
 
