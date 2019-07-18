@@ -3,7 +3,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: mongo_compat.py
 # @Last modified by:   archer
-# @Last modified time: 2019-07-17
+# @Last modified time: 2019-07-18
 # @License: Please see LICENSE in project root
 
 from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -228,9 +228,44 @@ class Mongo(object):
     def __iter__(self):
         """Iterate through housed dictionary, for looping."""
         raise NotImplementedError("iter() is not yet implemented")
-        return iter(self.args)
+        # self.db.connect()
+        # cursor = self.db.getData(pipeline=self.getPipe(
+        #     self.args["pipeline"]), collName=self.args["coll"])
+        #
+        # while(cursor.alive):
+        #     try:
+        #         yield self.nextBatch(cursor)
+        #     except StopIteration:
+        #         return
 
     __iter__.__annotations__ = {"return": any}
+
+    # def nextBatch(self, cursor):
+    #     """Return the very next batch in mongoDb cursor."""
+    #     batch = []
+    #     while(len(batch) < self.args["batchSize"]):
+    #         singleExample = cursor.next()
+    #         # checking shape matches expectations
+    #         if(len(singleExample["data"]) == self.args["timeSteps"]) and \
+    #                 (len(singleExample["data"][0]) ==
+    #                  self.args["dimensionality"]):
+    #             # if matches append
+    #             batch.append(singleExample)
+    #         else:
+    #             if(self.warn_count < 10):
+    #                 self.warn_count = self.warn_count + 1
+    #                 self.log("example len: " +
+    #                          str(len(singleExample["data"])) + ", dim: " +
+    #                          str(len(singleExample["data"][0])) +
+    #                          " != " + str(self.args["timeSteps"]) + ", " +
+    #                          str(self.args["dimensionality"]))
+    #     return batch
+
+    # def getPipe(self, pipePath):
+    #     """Get json for pipelines."""
+    #
+    #     with open(pipePath) as f:
+    #         return json.load(f)
 
     def __len__(self):
         """Return the first order length of the dictionary."""
