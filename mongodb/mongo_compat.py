@@ -3,7 +3,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: mongo_compat.py
 # @Last modified by:   archer
-# @Last modified time: 2019-07-18
+# @Last modified time: 2019-07-23
 # @License: Please see LICENSE in project root
 
 from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -287,7 +287,13 @@ def test():
     time.sleep(2)
     db.connect()
     db.debug()
-    db.imports(collection="debug", dictionary={"test": 15, "test1": "strings"})
+    db.imports(collection="debug", dictionary={
+        "string": "99",
+        "number": 99,
+        "binary": bin(99),
+        "subdict": {"hello": "world"},
+        "subarray": [{"hello": "worlds"}, {"hi": "jim"}]
+    })
     db.login()
     db.stop()
 
