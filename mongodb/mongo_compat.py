@@ -3,7 +3,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: mongo_compat.py
 # @Last modified by:   archer
-# @Last modified time: 2019-07-17
+# @Last modified time: 2019-08-01T15:55:32+01:00
 # @License: Please see LICENSE in project root
 
 from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -42,13 +42,20 @@ class Mongo(object):
             "mongoLogPath": self.home + "/db" + "/log",
             "mongoLogName": "mongoLog",
             "mongoCursorTimeout": 600000,
+            "mongoBatchSize": 32,
             "pylog": logger if logger is not None else print,
             "mongoSsl": None,
             "db": None,
+            "mongoPipeline": None,
         }
         self.args = self._merge_dicts(defaults, args)
 
     __init__.__annotations__ = {"args": dict, "return": None}
+
+    def test(self):
+        """This is a docstring."""
+        pass
+    test.__annotations__ = {"return": None}
 
     def initDb(self):
         """Initialise the database.
@@ -185,7 +192,7 @@ class Mongo(object):
             raise NotImplementedError("direct json import is not yet ready")
             # data = json_util.loads(json)
         elif (dictionary is not None):
-            self.args["db"][str(collection)].insert(dictionary)
+            self.args["db"][str(collection)].insert_one(dictionary)
 
     imports.__annotations__ = {"return": None}
 
@@ -197,6 +204,45 @@ class Mongo(object):
         return result
 
     _merge_dicts.__annotations__ = {"dicts": dict, "return": None}
+
+    def getCursor(self, pipeline=None, collection=None):
+        """Get data from database using provided aggregate pipeline.
+
+        Returns data as dictionary.
+        """
+        pipeline = pipeline if pipeline is not None else \
+            self.args["mongoPipeline"]
+        collection = collection if collection is not None else \
+            self.args["collName"]  # set collection name wanted
+        collection = self.args["db"][collection]  # set collection wanted
+        data_cursor = collection.aggregate(pipeline, allowDiskUse=True)
+        self.args["data_cursor"] = data_cursor
+        return data_cursor
+
+    getCursor.__annotations__ = {"pipeline": str, "return": dict}
+
+    def getBatches(self, batchSize=None):
+        """"""
+        batchSize = batchSize if batchSize is not None else \
+            self.args["mongoBatchSize"]
+        cursor = self.args["data_cursor"]
+        # while self.args["data_cursor"]
+        if(cursor is not None):
+            while(cursor.alive):
+                try:
+                    yield self.nextBatch(cursor, batchSize)
+                except StopIteration:
+                    return
+
+    getBatches.__annotations__ = {"pipeline": str, "return": dict}
+
+    def nextBatch(self, cursor, batchSize):
+        """Return the very next batch in mongoDb cursor."""
+        batch = []
+        while(len(batch) < batchSize):
+            singleExample = cursor.next()
+            batch.append(singleExample)
+        return batch
 
     def __setitem__(self, key, value):
         """Set a single arg or state by, (key, value)."""
@@ -242,18 +288,34 @@ class Mongo(object):
 
 def test():
     """Unit test of MongoDB compat."""
+    # create Mongo object to use
     db = Mongo({"test2": 2})
+    # output current state of Mongo
     db.debug()
+    # stop any active databases already running at the db path location
     db.stop()
+    # hold for 2 seconds to give the db time to start
     time.sleep(2)
+    # attempt to initialise the database, as in create the database with users
     db.initDb()
+    # hold to let the db to launch the now new unauthenticated db
     time.sleep(2)
+    # start the authenticated db, you will now need a username password access
     db.start()
+    # warm up time for new authentication db
     time.sleep(2)
+    # create a connection to the database so we can do database operations
     db.connect()
     db.debug()
+    # import data into mongodb debug collection
     db.imports(collection="debug", dictionary={"test": 15, "test1": "strings"})
+    # log into the database so user can manually check data import
     db.login()
+    # attempt to retrieve the data that exists in the collection as a cursor
+    db.getCursor(collection="debug", pipeline=[{"$match": {}}])
+    # inetate through the data in batches to minimise requests
+    for dataBatch in db.getBatches(batchSize=1):
+        print(dataBatch)
     db.stop()
 
 
