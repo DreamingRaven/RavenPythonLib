@@ -3,7 +3,7 @@
 # @Email:  george raven community at pm dot me
 # @Filename: mongo_compat.py
 # @Last modified by:   archer
-# @Last modified time: 2019-08-01T15:55:32+01:00
+# @Last modified time: 2019-08-01T16:00:39+01:00
 # @License: Please see LICENSE in project root
 
 from __future__ import print_function, absolute_import   # python 2-3 compat
@@ -274,9 +274,44 @@ class Mongo(object):
     def __iter__(self):
         """Iterate through housed dictionary, for looping."""
         raise NotImplementedError("iter() is not yet implemented")
-        return iter(self.args)
+        # self.db.connect()
+        # cursor = self.db.getData(pipeline=self.getPipe(
+        #     self.args["pipeline"]), collName=self.args["coll"])
+        #
+        # while(cursor.alive):
+        #     try:
+        #         yield self.nextBatch(cursor)
+        #     except StopIteration:
+        #         return
 
     __iter__.__annotations__ = {"return": any}
+
+    # def nextBatch(self, cursor):
+    #     """Return the very next batch in mongoDb cursor."""
+    #     batch = []
+    #     while(len(batch) < self.args["batchSize"]):
+    #         singleExample = cursor.next()
+    #         # checking shape matches expectations
+    #         if(len(singleExample["data"]) == self.args["timeSteps"]) and \
+    #                 (len(singleExample["data"][0]) ==
+    #                  self.args["dimensionality"]):
+    #             # if matches append
+    #             batch.append(singleExample)
+    #         else:
+    #             if(self.warn_count < 10):
+    #                 self.warn_count = self.warn_count + 1
+    #                 self.log("example len: " +
+    #                          str(len(singleExample["data"])) + ", dim: " +
+    #                          str(len(singleExample["data"][0])) +
+    #                          " != " + str(self.args["timeSteps"]) + ", " +
+    #                          str(self.args["dimensionality"]))
+    #     return batch
+
+    # def getPipe(self, pipePath):
+    #     """Get json for pipelines."""
+    #
+    #     with open(pipePath) as f:
+    #         return json.load(f)
 
     def __len__(self):
         """Return the first order length of the dictionary."""
@@ -287,6 +322,7 @@ class Mongo(object):
 
 
 def test():
+    import datetime
     """Unit test of MongoDB compat."""
     # create Mongo object to use
     db = Mongo({"test2": 2})
@@ -308,7 +344,14 @@ def test():
     db.connect()
     db.debug()
     # import data into mongodb debug collection
-    db.imports(collection="debug", dictionary={"test": 15, "test1": "strings"})
+    db.imports(collection="debug", dictionary={
+        "string": "99",
+        "number": 99,
+        "binary": bin(99),
+        "subdict": {"hello": "world"},
+        "subarray": [{"hello": "worlds"}, {"hi": "jim"}],
+        "timedate": datetime.datetime.utcnow(),
+    })
     # log into the database so user can manually check data import
     db.login()
     # attempt to retrieve the data that exists in the collection as a cursor
